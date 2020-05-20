@@ -40,7 +40,7 @@ class CreateLogoScreen extends Component {
         super(props)
         
         this.state = {
-            renderText: "",
+            renderText: [],
             renderColor: "",
             renderBackgroundColor: "",
             renderBorderColor: "",
@@ -92,6 +92,7 @@ class CreateLogoScreen extends Component {
                                         <input type="text" className="form-control" name="text" ref={node => {
                                             text = node;
                                         }} onChange={() => this.setState({renderText: text.value})} placeholder="Text" />
+                                        
                                     </div>
                                     <div className="form-group col-4">
                                         <label htmlFor="color">Color:</label>
@@ -155,7 +156,7 @@ class CreateLogoScreen extends Component {
                                     </div>
                                     <button type="submit" className="btn btn-success">Save Logo</button>
                                 </form>
-                                <div className="col-6">
+                                <div className="col-6" id="logoview">
                                     <span style={{
                                         display: "inline-block",
                                         color: this.state.renderColor ? this.state.renderColor : "#000000",

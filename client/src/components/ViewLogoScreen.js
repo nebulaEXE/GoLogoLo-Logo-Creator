@@ -45,7 +45,7 @@ class ViewLogoScreen extends Component {
 }
     saveLogo = () => {
         window.scrollTo(0,0)
-        html2canvas(document.getElementById("logo")).then(canvas => {
+        html2canvas(document.getElementById("logoview")).then(canvas => {
             var img = canvas.toDataURL("logo/png");
             this.download(img, 'logo.png');
         })
@@ -106,7 +106,7 @@ class ViewLogoScreen extends Component {
                                                     <Link to={`/edit/${data.logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
                                                     <button type="submit" className="btn btn-danger">Delete</button>
                                                 </form>
-                                                <button type="submit" id ="save" onClick={this.saveLogo} className="btn btn-primary">Download Logo</button>&nbsp;
+                                                <button type="submit" onClick={this.saveLogo} className="btn btn-primary">Download Logo</button>&nbsp;
                                                 {loading && <p>Loading...</p>}
                                                 {error && <p>Error :( Please try again</p>}
                                             </div>
@@ -114,7 +114,7 @@ class ViewLogoScreen extends Component {
                                         )}
                                     </Mutation>
                                     </div>
-                                    <div className="col-6" id="logo">
+                                    <div className="col-6" id="logoview">
                                         <span style={{
                                             display: "inline-block",
                                             color: data.logo.color,

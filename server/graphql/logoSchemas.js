@@ -9,6 +9,17 @@ var GraphQLInt = require('graphql').GraphQLInt;
 var GraphQLDate = require('graphql-date');
 var LogoModel = require('../models/Logo');
 
+var textType = new GraphQLObjectType({
+    name: 'textBox',
+    fields: function() {
+        return {
+            text: {
+                type: GraphQLString
+            }
+    }
+}
+});
+
 var logoType = new GraphQLObjectType({
     name: 'logo',
     fields: function () {
@@ -18,6 +29,9 @@ var logoType = new GraphQLObjectType({
             },
             text: {
                 type: GraphQLString
+            },
+            texts: {
+                type: GraphQLList(GraphQLString)
             },
             color: {
                 type: GraphQLString
@@ -132,6 +146,9 @@ var mutation = new GraphQLObjectType({
                     text: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
+                    texts: {
+                        type: new GraphQLList(GraphQLString)
+                    },
                     color: {
                         type: new GraphQLNonNull(GraphQLString)
                     },
@@ -181,6 +198,9 @@ var mutation = new GraphQLObjectType({
                     },
                     text: {
                         type: new GraphQLNonNull(GraphQLString)
+                    },
+                    texts: {
+                        type: new GraphQLList(GraphQLString)
                     },
                     color: {
                         type: new GraphQLNonNull(GraphQLString)
