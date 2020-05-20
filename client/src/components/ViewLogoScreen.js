@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import html2canvas from 'html2canvas';
 
 const GET_LOGO = gql`
     query logo($logoId: String) {
@@ -16,6 +17,7 @@ const GET_LOGO = gql`
             borderWidth
             borderRadius
             padding
+            margin
             height
             width
             lastUpdate
@@ -31,7 +33,23 @@ const DELETE_LOGO = gql`
   }
 `;
 
+
 class ViewLogoScreen extends Component {
+    download = (uri, filename) => {
+        var link = document.createElement('a');
+        link.href = uri;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+}
+    saveLogo = () => {
+        window.scrollTo(0,0)
+        html2canvas(document.getElementById("logo")).then(canvas => {
+            var img = canvas.toDataURL("logo/png");
+            this.download(img, 'logo.png');
+        })
+        }
 
     render() {
         return (
@@ -68,6 +86,8 @@ class ViewLogoScreen extends Component {
                                             <dd>{data.logo.borderRadius}</dd>
                                             <dt>Padding:</dt>
                                             <dd>{data.logo.padding}</dd>
+                                            <dt>Margin:</dt>
+                                            <dd>{data.logo.margin}</dd>
                                             <dt>Height:</dt>
                                             <dd>{data.logo.height}</dd>
                                             <dt>Width:</dt>
@@ -84,15 +104,17 @@ class ViewLogoScreen extends Component {
                                                         removeLogo({ variables: { id: data.logo._id } });
                                                     }}>
                                                     <Link to={`/edit/${data.logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
-                                                <button type="submit" className="btn btn-danger">Delete</button>
+                                                    <button type="submit" className="btn btn-danger">Delete</button>
                                                 </form>
+                                                <button type="submit" id ="save" onClick={this.saveLogo} className="btn btn-primary">Download Logo</button>&nbsp;
                                                 {loading && <p>Loading...</p>}
                                                 {error && <p>Error :( Please try again</p>}
                                             </div>
+                                            
                                         )}
                                     </Mutation>
                                     </div>
-                                    <div className="col-6">
+                                    <div className="col-6" id="logo">
                                         <span style={{
                                             display: "inline-block",
                                             color: data.logo.color,
@@ -103,6 +125,7 @@ class ViewLogoScreen extends Component {
                                             borderWidth: data.logo.borderWidth + "px",
                                             borderRadius: data.logo.borderRadius + "px",
                                             padding: data.logo.padding + "px",
+                                            margin: data.logo.margin + "px",
                                             height: data.logo.height,
                                             width: data.logo.width 
                                         }}>{data.logo.text}</span>
@@ -115,6 +138,8 @@ class ViewLogoScreen extends Component {
             </Query>
         );
     }
+    
 }
+
 
 export default ViewLogoScreen;

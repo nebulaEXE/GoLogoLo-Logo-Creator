@@ -14,6 +14,7 @@ const ADD_LOGO = gql`
         $borderWidth: Int!,
         $borderRadius: Int!,
         $padding: Int!,
+        $margin: Int!,
         $height: Int!,
         $width: Int!) {
         addLogo(
@@ -25,6 +26,7 @@ const ADD_LOGO = gql`
             borderWidth: $borderWidth,
             borderRadius: $borderRadius,
             padding: $padding,
+            margin: $margin,
             height: $height
             width: $width) {
             _id
@@ -46,13 +48,14 @@ class CreateLogoScreen extends Component {
             renderBorderRadius: "",
             renderFontSize: "",
             renderPadding: "",
+            renderMargin: "",
             renderHeight: "",
             renderWidth: ""
         }
     }
 
     render() {
-        let text, color, fontSize, backgroundColor, borderColor, borderWidth, borderRadius, padding, height, width;
+        let text, color, fontSize, backgroundColor, borderColor, borderWidth, borderRadius, padding, margin, height, width;
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error }) => (
@@ -70,7 +73,7 @@ class CreateLogoScreen extends Component {
                                     addLogo({ variables: { text: text.value, color: color.value, fontSize: parseInt(fontSize.value),
                                                             backgroundColor: backgroundColor.value, borderColor: borderColor.value,
                                                             borderWidth: parseInt(borderWidth.value), borderRadius: parseInt(borderRadius.value),
-                                                            padding: parseInt(padding.value), height: parseInt(height.value),
+                                                            padding: parseInt(padding.value), margin: parseInt(margin.value), height: parseInt(height.value),
                                                             width: parseInt(width.value) } });
                                     text.value = "";
                                     color.value = "";
@@ -80,6 +83,7 @@ class CreateLogoScreen extends Component {
                                     borderWidth.value = "";
                                     borderRadius.value = "";
                                     padding.value = "";
+                                    margin.value = "";
                                     height.value = "";
                                     width.value = "";
                                 }}>
@@ -132,6 +136,12 @@ class CreateLogoScreen extends Component {
                                         }} onChange={() => this.setState({renderPadding: parseInt(padding.value)})} placeholder="Padding" />
                                     </div>
                                     <div className="form-group col-8">
+                                        <label htmlFor="margin">Margin:</label>
+                                        <input type="number" onInput={()=>{margin.value = clamp(margin.value, 0, 100);}} className="form-control" name="margin" ref={node => {
+                                            margin = node;
+                                        }} onChange={() => this.setState({renderMargin: parseInt(margin.value)})} placeholder="Margin" />
+                                    </div>
+                                    <div className="form-group col-8">
                                         <label htmlFor="height">Height:</label>
                                         <input type="number" onInput={()=>{height.value = clamp(height.value, 0, 900);}} className="form-control" name="height" ref={node => {
                                             height = node;
@@ -143,7 +153,7 @@ class CreateLogoScreen extends Component {
                                             width = node;
                                         }} onChange={() => this.setState({renderWidth: parseInt(width.value)})} placeholder="Logo Width" />
                                     </div>
-                                    <button type="submit" className="btn btn-success">Submit</button>
+                                    <button type="submit" className="btn btn-success">Save Logo</button>
                                 </form>
                                 <div className="col-6">
                                     <span style={{
@@ -156,6 +166,7 @@ class CreateLogoScreen extends Component {
                                         borderWidth: (this.state.renderBorderWidth ? this.state.renderBorderWidth : 5) + "px",
                                         borderRadius: (this.state.renderBorderRadius ? this.state.renderBorderRadius : 5) + "px",
                                         padding: (this.state.renderPadding ? this.state.renderPadding : 0) + "px",
+                                        margin: (this.state.renderMargin ? this.state.renderMargin: 0) + "px",
                                         height: (this.state.renderHeight ? this.state.renderHeight : 34),
                                         width: (this.state.renderWidth ? this.state.renderWidth : 82) 
                                     }}>{this.state.renderText ? this.state.renderText : "New Logo"}</span>
